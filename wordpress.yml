@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: vishwp
+  name: vishwp
+spec:
+  selector:
+    matchLabels:
+      run:  vishwp
+  replicas:  2
+  template:
+    metadata:
+      labels:
+        run:  vishwp
+    spec:
+      containers:
+      - image: wordpress:5.1.1-php7.3-apache
+        name: vishwp

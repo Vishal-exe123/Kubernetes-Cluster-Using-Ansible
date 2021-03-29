@@ -1,0 +1,51 @@
+- hosts: tag_Name_MasterNode
+  tasks:
+  - name: Copying all the yaml files in K8S Client
+    copy:
+      src: "{{ item }}"
+      dest: "/root/{{ item }}"
+    loop:
+            - MySql.yml
+            - svc.yml
+            - wordpress.yml
+            - secret.yml
+
+  - name: Creating Secret
+    shell: "kubectl apply -f /root/secret.yml"
+    register: secret
+    ignore_errors:  yes
+
+  - name: Output of Secret
+    debug:
+      var: secret
+
+  - name: Creating MySql pod
+    shell: "kubectl apply -f /root/MySql.yml"
+    register: mysql
+    ignore_errors:  yes
+
+
+  - name: Output of MySql pod
+    debug:
+      var: mysql
+
+  - name: Creating Wordpress pod
+    shell: "kubectl apply -f /root/wordpress.yml"
+    register: wp
+    ignore_errors:  yes
+    
+
+  - name: Output of Wordpress pod
+    debug:
+      var: wp
+
+  - name: Exposing Wordpress to Outside guys using Service/LB
+    shell: "kubectl apply -f /root/svc.yml"
+    register: svc
+    ignore_errors:  yes
+
+
+  - name: Output of service expose
+    debug:
+      var: svc
+
